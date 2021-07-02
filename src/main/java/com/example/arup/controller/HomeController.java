@@ -1,8 +1,10 @@
 package com.example.arup.controller;
 
+import com.example.arup.dao.StudentRepository;
 import com.example.arup.entity.Student;
 import com.example.arup.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,14 @@ public class HomeController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    StudentRepository repository;
+
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
 
     @GetMapping({"/home"})
     public String homePage(Model model) {
@@ -39,5 +49,19 @@ public class HomeController {
 
         return studentService.save(s);
     }
+
+    @ResponseBody
+    @GetMapping("/student")
+    public List<Student> getStudentByName(@RequestParam String name) {
+        return repository.getStudent(name);
+    }
+
+    @ResponseBody
+    @GetMapping("/update")
+    public int getStudentByName(@RequestParam String name, @RequestParam int id) {
+        return repository.updateStudent(name, id);
+    }
+
+
 
 }
